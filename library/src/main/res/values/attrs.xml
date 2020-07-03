@@ -3,6 +3,7 @@
     <declare-styleable name="OperateSeekBar">
         <attr name="seekBar_title" format="string" />
         <attr name="seekBar_titleColor" format="color" />
+        <attr name="seekBar_TintColor" format="color" />
         <attr name="seekBar_maxProgress" format="integer" />
         <attr name="seekBar_progress" format="integer" />
     </declare-styleable>

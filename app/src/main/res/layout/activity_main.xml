@@ -10,6 +10,7 @@
         android:id="@+id/seekBar"
         app:seekBar_title="@string/app_name"
         app:seekBar_titleColor="#666"
+        app:seekBar_TintColor="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />

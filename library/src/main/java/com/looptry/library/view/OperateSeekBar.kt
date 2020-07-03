@@ -1,6 +1,8 @@
 package com.looptry.library.view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.looptry.library.R
 import kotlinx.android.synthetic.main.view_operate_seekbar.view.*
 
@@ -60,6 +63,14 @@ class OperateSeekBar(
         )).also {
             tvTitle.setTextColor(it)
         }
+        //TintColor
+        (ta.getColor(
+            R.styleable.OperateSeekBar_seekBar_TintColor,
+            getColorRes(R.color.colorWhite)
+        )).also {
+            setAddTintColor(it)
+            setMinusTintColor(it)
+        }
         //seekBar-->maxProgress
         (ta.getInt(R.styleable.OperateSeekBar_seekBar_maxProgress, 100)).also {
             maxProgress = it
@@ -101,5 +112,38 @@ class OperateSeekBar(
                 listener.onClick(it)
         }
         return this
+    }
+
+    private fun getTintDrawable(drawable: Drawable, @ColorInt tintColor: Int): Drawable {
+        val wrapDrawable = DrawableCompat.wrap(drawable)
+        DrawableCompat.setTint(wrapDrawable, tintColor)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            wrapDrawable.setTint(tintColor)
+//        } else {
+//            DrawableCompat.setTint(wrapDrawable, tintColor)
+//        }
+        return wrapDrawable
+    }
+
+    private fun setAddTintColor(@ColorInt tintColor: Int) {
+        btnAdd.setImageDrawable(
+            getTintDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_seekbar_add
+                )!!, tintColor
+            )
+        )
+    }
+
+    private fun setMinusTintColor(@ColorInt tintColor: Int) {
+        btnMinus.setImageDrawable(
+            getTintDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_seekbar_minus
+                )!!, tintColor
+            )
+        )
     }
 }
