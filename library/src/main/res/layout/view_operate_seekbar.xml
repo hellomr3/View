@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#FFF"
+            app:layout_constraintStart_toEndOf="@id/btnMinus"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="变倍" />
+
+        <ImageButton
+            android:id="@+id/btnMinus"
+            android:layout_width="15dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_seekbar_minus"
+            app:layout_constraintBottom_toBottomOf="@id/operateSeekBar"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/operateSeekBar"
+            tools:background="@tools:sample/avatars" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/operateSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
+            android:paddingStart="8dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="0dp"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:thumbTint="#ff6669"
+            app:layout_constraintEnd_toStartOf="@id/btnAdd"
+            app:layout_constraintStart_toEndOf="@id/btnMinus"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <ImageButton
+            android:id="@+id/btnAdd"
+            android:layout_width="15dp"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_seekbar_add"
+            app:layout_constraintBottom_toBottomOf="@id/operateSeekBar"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/operateSeekBar"
+            tools:background="@tools:sample/avatars" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>
