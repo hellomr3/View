@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.looptry.library.R
+import com.looptry.library.util.getColorRes
+import com.looptry.library.util.getTintDrawable
 import kotlinx.android.synthetic.main.view_operate_seekbar.view.*
 
 /**
@@ -59,14 +61,14 @@ class OperateSeekBar(
         //title-color
         (ta.getColor(
             R.styleable.OperateSeekBar_seekBar_titleColor,
-            getColorRes(R.color.colorWhite)
+            context.getColorRes(R.color.colorWhite)
         )).also {
             tvTitle.setTextColor(it)
         }
         //TintColor
         (ta.getColor(
             R.styleable.OperateSeekBar_seekBar_TintColor,
-            getColorRes(R.color.colorWhite)
+            context.getColorRes(R.color.colorWhite)
         )).also {
             setAddTintColor(it)
             setMinusTintColor(it)
@@ -91,9 +93,6 @@ class OperateSeekBar(
         ta.recycle()
     }
 
-    private fun getColorRes(@ColorRes color: Int): Int {
-        return ContextCompat.getColor(context, color)
-    }
 
     //设置减事件
     fun setMinusListener(listener: View.OnClickListener): OperateSeekBar {
@@ -114,36 +113,21 @@ class OperateSeekBar(
         return this
     }
 
-    private fun getTintDrawable(drawable: Drawable, @ColorInt tintColor: Int): Drawable {
-        val wrapDrawable = DrawableCompat.wrap(drawable)
-        DrawableCompat.setTint(wrapDrawable, tintColor)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            wrapDrawable.setTint(tintColor)
-//        } else {
-//            DrawableCompat.setTint(wrapDrawable, tintColor)
-//        }
-        return wrapDrawable
-    }
-
     private fun setAddTintColor(@ColorInt tintColor: Int) {
         btnAdd.setImageDrawable(
-            getTintDrawable(
-                ContextCompat.getDrawable(
-                    context,
-                    R.drawable.ic_seekbar_add
-                )!!, tintColor
-            )
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_seekbar_add
+            )!!.getTintDrawable(tintColor)
         )
     }
 
     private fun setMinusTintColor(@ColorInt tintColor: Int) {
         btnMinus.setImageDrawable(
-            getTintDrawable(
-                ContextCompat.getDrawable(
-                    context,
-                    R.drawable.ic_seekbar_minus
-                )!!, tintColor
-            )
+            ContextCompat.getDrawable(
+                context,
+                R.drawable.ic_seekbar_minus
+            )!!.getTintDrawable(tintColor)
         )
     }
 }
