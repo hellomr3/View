@@ -22,4 +22,18 @@
         <attr name="fold_foldIcon" format="reference" />
         <attr name="fold_unFoldIcon" format="reference" />
     </declare-styleable>
+
+    <!--时间线 Timeline-->
+    <declare-styleable name="Timeline">
+        <attr name="middle_line_color" format="color" />
+
+        <attr name="time_line_color" format="color" />
+        <attr name="time_line_height" format="dimension" />
+        <attr name="time_line_width" format="dimension" />
+
+        <attr name="usable_area_color" format="color" />
+
+        <attr name="android:textSize" format="dimension" />
+        <attr name="android:textColor" format="color" />
+    </declare-styleable>
 </resources>

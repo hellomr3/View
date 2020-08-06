@@ -6,21 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.looptry.library.view.OperateSeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:seekBar_TintColor="@color/colorAccent"
-        app:seekBar_title="@string/app_name"
-        app:seekBar_titleColor="#666" />
-
-    <com.looptry.library.view.FoldTextView
-        android:id="@+id/mFoldTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:fold_btnTextColor="@color/colorAccent"
-        app:fold_foldIcon="@drawable/ic_expend"
-        app:fold_content="我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只我只只文字我只"
-        app:layout_constraintTop_toBottomOf="@id/seekBar" />
+    <com.looptry.library.view.Timeline
+        android:id="@+id/timeLine"
+        android:layout_width="0dp"
+        app:usable_area_color="@color/colorPrimaryDark"
+        app:middle_line_color="@color/colorAccent"
+        app:time_line_color="@color/colorPrimary"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
