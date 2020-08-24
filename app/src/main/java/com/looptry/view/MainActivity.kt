@@ -13,17 +13,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val recordList = mutableListOf<Pair<Long, Long>>()
-        val current = System.currentTimeMillis()
-        Pair<Long, Long>(current - 1 * 60 * 60 * 1000, current).also { recordList.add(it) }
-        Pair<Long, Long>(
-            current - 3 * 60 * 60 * 1000,
-            current - 2 * 60 * 60 * 1000
-        ).also { recordList.add(it) }
-        Pair<Long, Long>(
-            current + 1 * 60 * 60 * 1000,
-            current + 2 * 60 * 60 * 1000
-        ).also { recordList.add(it) }
-        timeLine.setRecordList(recordList)
+
     }
 }
