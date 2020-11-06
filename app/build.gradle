@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.looptry.view"
-        minSdkVersion 17
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -35,4 +35,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation project(":library")
+    //视频库
+    implementation 'com.shuyu:GSYVideoPlayer:7.1.8'
+
+    //是否需要ExoPlayer模式
+    implementation 'com.shuyu:GSYVideoPlayer-exo2:7.1.8'
+
+////更多ijk的编码支持
+//    implementation 'com.shuyu:gsyVideoPlayer-ex_so:7.1.8'
 }

@@ -40,4 +40,8 @@
     <declare-styleable name="ScalableImageView">
         <attr name="android:src" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="FriendLayout">
+        <attr name="normalMargin" format="dimension" />
+    </declare-styleable>
 </resources>
