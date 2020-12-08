@@ -1,22 +1,23 @@
 package com.looptry.library.view
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
-import android.graphics.drawable.Drawable
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.annotation.IntDef
+import androidx.appcompat.widget.AppCompatTextView
 import com.looptry.library.R
-import com.looptry.library.util.getTintDrawable
-import com.looptry.library.util.toPx
-import kotlin.properties.Delegates
+import com.looptry.library.ext.setClickable
+import com.looptry.library.ext.setTextColor
+import com.looptry.library.ext.toSpan
 
 
 /**
@@ -26,104 +27,79 @@ import kotlin.properties.Delegates
  * Modify By:
  * Modify Date:
  */
-class FoldTextView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+class FoldTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
 
-    //0折叠 1展开 2无操作
-    var isFoldFlag = 2
+    companion object {
+        //无需折叠展开
+        const val NO_FOLD = 0x00
 
-    //折叠内容
-    private val textView = TextView(context)
+        //折叠、折叠中
+        const val FOLD = 0X01
 
-    private val textViewLayoutParams by lazy {
-        LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = Gravity.CENTER_VERTICAL or Gravity.START
-        }
+        //展平、展开状态
+        const val FLAT = 0X02
     }
 
-    //控制按钮
-    private val btnView = TextView(context)
+    @IntDef(value = [NO_FOLD, FOLD, FLAT])
+    @Target(AnnotationTarget.TYPE)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class Mode
 
-    private val btnViewLayoutParams by lazy {
-        LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = Gravity.END
-        }
-    }
+    //展开模型
+    var foldMode: @Mode Int = NO_FOLD
 
-    //默认行
-    var showLines by Delegates.notNull<Int>()
-
-    //内容信息
-    var content: CharSequence
-        get() = textView.text
+    //属性动画
+    var step: Float = 0f
         set(value) {
-            textView.text = value
+            field = value
+            initView()
         }
 
-    //内容字体颜色
-    var contentTextColor: Int
-        get() = textView.textColors.defaultColor
+    //动画
+    private val objectAnimator = ObjectAnimator.ofFloat(this, "step", 0f, 1f)
+
+    //默认展示行数
+    var showLines = 3
+
+    //内容
+    var content: CharSequence = ""
         set(value) {
-            textView.setTextColor(value)
+            field = value
+            //测量内容占lineCount
+            val lineCount = value.getPreLineCount()
+            //判定当前显示类型
+            foldMode = when {
+                lineCount <= showLines -> {
+                    NO_FOLD
+                }
+                lineCount > showLines && foldMode == NO_FOLD -> {
+                    FOLD
+                }
+                else -> FLAT
+            }
+            initView()
         }
 
-    //内容字体大小
-    var contentTextSize: Float
-        get() = textView.textSize
-        set(value) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, value)
-        }
+    //点击按钮文字颜色
+    var btnTextColor = paint.color
 
-    //Btn 字
-    var btnText: CharSequence
-        get() = btnView.text
-        set(value) {
-            btnView.text = if (value.isBlank()) "点击展开" else value
-        }
+    //点击按钮文字大小
+    var btnTextSize = paint.textSize
 
-    //Btn 字体颜色
-    var btnTextColor: Int
-        get() = btnView.textColors.defaultColor
-        set(value) {
-            btnView.setTextColor(value)
-        }
+    //折叠状态下文字
+    var foldText = context.getString(R.string.foldTextView_foldText)
 
-    //内容字体大小
-    var btnTextSize: Float
-        get() = btnView.textSize
-        set(value) {
-            btnView.setTextSize(TypedValue.COMPLEX_UNIT_PX, value)
-        }
+    //展开状态下文字
+    var flatText = context.getString(R.string.foldTextView_flatText)
 
-    //展开  折叠
-    var unFoldIcon: Drawable?
-        get() = btnView.compoundDrawables.getOrNull(2)
-        set(value) {
-            btnView.setCompoundDrawables(null, null, value, null)
-        }
-
-    var foldIcon: Drawable?
-        get() = btnView.compoundDrawables.getOrNull(2)
-        set(value) {
-            value?.setBounds(0, 0, 32, 32)
-            btnView.setCompoundDrawablesRelativeWithIntrinsicBounds(value, null, value, null)
-        }
 
     init {
-        orientation = LinearLayout.VERTICAL
-        addView(textView, textViewLayoutParams)
-        addView(btnView, btnViewLayoutParams)
         //attr
         val ta = context.obtainStyledAttributes(attrs, R.styleable.FoldTextView)
         initAttrs(ta)
-        //处理页面逻辑
-        initView()
         ta.recycle()
+        //点击事件生效
+        movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun initAttrs(ta: TypedArray) {
@@ -135,78 +111,100 @@ class FoldTextView(context: Context, attrs: AttributeSet?) : LinearLayout(contex
         ta.getString(R.styleable.FoldTextView_fold_content)?.let {
             content = it
         }
-        //contentColor
-        ta.getColor(R.styleable.FoldTextView_fold_contentColor, Color.GRAY).also {
-            contentTextColor = it
+        //foldText
+        ta.getString(R.styleable.FoldTextView_fold_foldText)?.let {
+            foldText = it
         }
-        //contentTextSize
-        ta.getDimension(R.styleable.FoldTextView_fold_contentSize, 12f.toPx()).also {
-            contentTextSize = it
+        //flatText
+        ta.getString(R.styleable.FoldTextView_fold_flatText)?.let {
+            flatText = it
         }
-        //btn
-        ta.getString(R.styleable.FoldTextView_fold_btnText).also {
-            btnText = it ?: ""
-        }
-        //btnColor
-        ta.getColor(R.styleable.FoldTextView_fold_btnTextColor, Color.GRAY).also {
+        //btnTextColor
+        ta.getColor(R.styleable.FoldTextView_fold_btnTextColor, paint.color).let {
             btnTextColor = it
         }
-        //btnSize
-        ta.getDimension(R.styleable.FoldTextView_fold_btnTextSize, 12f.toPx()).also {
+        //btnTextSize
+        ta.getDimension(R.styleable.FoldTextView_fold_btnTextSize, paint.textSize).let {
             btnTextSize = it
         }
-        //foldIcon
-        ta.getDrawable(R.styleable.FoldTextView_fold_foldIcon).also {
-            foldIcon = it
-            Log.e("TAG", "$it")
-        }
-        //unFoldIcon
-        ta.getDrawable(R.styleable.FoldTextView_fold_unFoldIcon).also {
-            unFoldIcon = it
-        }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        initView()
     }
 
     private fun initView() {
-        //
-        textView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                if (textView.lineCount > showLines) {
-                    textView.setLines(showLines)
-                    isFoldFlag = 0
-                } else {
-                    isFoldFlag = 2
-                    btnView.visibility = View.GONE
-                }
-                textView.viewTreeObserver.removeOnPreDrawListener(this)
-                return false
+        if (width == 0 || height == 0) return
+        when (foldMode) {
+            NO_FOLD -> {
+                text = content
             }
-
-        })
-        //设置点击事件
-        btnView.setOnClickListener {
-            when (isFoldFlag) {
-                //折叠状态
-                0 -> {
-                    textView.maxLines = (Int.MAX_VALUE)
-                    btnView.visibility = View.GONE
+            FOLD -> {
+                setTextWithAction(foldText) {
+                    foldMode = FLAT
+                    objectAnimator.start()
                 }
-                //收起
-                1 -> {
-                    textView.setLines(showLines)
-                    requestLayout()
-                }
-                else -> {
-
+            }
+            FLAT -> {
+                setTextWithAction(flatText) {
+                    foldMode = FOLD
+                    objectAnimator.reverse()
                 }
             }
         }
     }
 
-    private fun getRealTextViewHeight(textView: TextView): Int {
-        val textHeight = textView.layout.getLineTop(textView.lineCount)
-        val padding = textView.compoundPaddingTop + textView.compoundPaddingBottom
-        return textHeight + padding
+    private fun setTextWithAction(displayText: String, block: () -> Unit) {
+        if (content.isBlank()) return
+        val limitLength = getLimitLineLength(content, showLines)
+        val totalLength = limitLength + (content.length - limitLength) * step
+        val showContent = "${content.substring(0, totalLength.toInt())}\n${displayText}"
+        val start = showContent.length - displayText.length
+        val end = showContent.length
+        showContent
+            .toSpan()
+            .apply {
+                setTextColor(btnTextColor, start, end)
+                setClickable(object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        block.invoke()
+                    }
+
+                    override fun updateDrawState(ds: TextPaint) {
+                        ds.isUnderlineText = false
+                    }
+                }, start, end)
+            }
+            .also {
+                text = it
+            }
     }
 
-    private val defaultDuration = 350L
+    //尝试获取到指定行
+    private fun getLimitLineLength(content: CharSequence, limitLine: Int): Int {
+        val lineLength = ((width - paddingStart - paddingEnd) / paint.textSize).toInt()
+        val subContent = lineLength * limitLine
+        if (content.length > subContent) {
+            return getLimitLineLength(content.subSequence(0, subContent), limitLine)
+        }
+        return if (content.getPreLineCount() > limitLine) {
+            getLimitLineLength(content.subSequence(0, content.length - 1), limitLine)
+        } else {
+            content.length
+        }
+
+    }
+
+    //根据View宽计算文字
+    private fun CharSequence.getPreLineCount(): Int {
+        if (this.isEmpty()) return 0
+        val layout = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            StaticLayout.Builder.obtain(this, 0, this.length, paint, width)
+                .build()
+        } else {
+            StaticLayout(this, paint, width, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, true)
+        }
+        return layout.lineCount
+    }
 }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="foldTextView_foldText">全文</string>
+    <string name="foldTextView_flatText">收起</string>
+</resources>

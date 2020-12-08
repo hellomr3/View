@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="OperateSeekBar">
         <attr name="seekBar_title" format="string" />
         <attr name="seekBar_titleColor" format="color" />
@@ -8,19 +9,17 @@
         <attr name="seekBar_progress" format="integer" />
     </declare-styleable>
 
+    <!--可折叠展开的TextView-->
     <declare-styleable name="FoldTextView">
         <!--默认展示多少行-->
         <attr name="fold_showLines" format="integer" />
         <!--内容-->
         <attr name="fold_content" format="string" />
-        <attr name="fold_contentColor" format="color" />
-        <attr name="fold_contentSize" format="dimension" />
         <!--Btn-->
-        <attr name="fold_btnText" format="string" />
+        <attr name="fold_foldText" format="string" />
+        <attr name="fold_flatText" format="string" />
         <attr name="fold_btnTextColor" format="color" />
         <attr name="fold_btnTextSize" format="dimension" />
-        <attr name="fold_foldIcon" format="reference" />
-        <attr name="fold_unFoldIcon" format="reference" />
     </declare-styleable>
 
     <!--时间线 Timeline-->
