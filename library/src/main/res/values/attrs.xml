@@ -43,4 +43,9 @@
     <declare-styleable name="FriendLayout">
         <attr name="normalMargin" format="dimension" />
     </declare-styleable>
+
+    <!--RecordTimer-->
+    <declare-styleable name="RecordTimer">
+        <attr name="defaultTimeSecond" format="integer" />
+    </declare-styleable>
 </resources>
