@@ -27,9 +27,17 @@ import com.looptry.library.ext.toSpan
  * Modify By:
  * Modify Date:
  */
-class FoldTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
+class FoldTextView(
+    context: Context,
+    attrs: AttributeSet?,
+    defStyleAttr: Int = 0
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     companion object {
+
+        val TAG: String
+            get() = FoldTextView.javaClass.simpleName
+
         //无需折叠展开
         const val NO_FOLD = 0x00
 
@@ -65,18 +73,6 @@ class FoldTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(c
     var content: CharSequence = ""
         set(value) {
             field = value
-            //测量内容占lineCount
-            val lineCount = value.getPreLineCount()
-            //判定当前显示类型
-            foldMode = when {
-                lineCount <= showLines -> {
-                    NO_FOLD
-                }
-                lineCount > showLines && foldMode == NO_FOLD -> {
-                    FOLD
-                }
-                else -> FLAT
-            }
             initView()
         }
 
@@ -131,11 +127,31 @@ class FoldTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(c
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        measureMode()
         initView()
     }
 
+    //计算当前的显示模式
+    private fun measureMode() {
+        //测量内容占lineCount
+        val lineCount = content.getPreLineCount()
+        //判定当前显示类型
+        foldMode = when {
+            content.isBlank() || width == 0 -> {
+                NO_FOLD
+            }
+            lineCount <= showLines -> {
+                NO_FOLD
+            }
+            lineCount > showLines && foldMode == NO_FOLD -> {
+                FOLD
+            }
+            else -> FLAT
+        }
+    }
+
+    //更新页面
     private fun initView() {
-        if (width == 0 || height == 0) return
         when (foldMode) {
             NO_FOLD -> {
                 text = content
@@ -198,7 +214,7 @@ class FoldTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(c
 
     //根据View宽计算文字
     private fun CharSequence.getPreLineCount(): Int {
-        if (this.isEmpty()) return 0
+        if (this.isEmpty() || width == 0) return 0
         val layout = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             StaticLayout.Builder.obtain(this, 0, this.length, paint, width)
                 .build()

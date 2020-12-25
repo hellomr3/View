@@ -12,7 +12,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.blankj.utilcode.util.TimeUtils
 import com.looptry.library.R
 import java.util.*
@@ -27,7 +29,7 @@ import java.util.*
 class RecordTimer(
     context: Context,
     attr: AttributeSet?
-) : ConstraintLayout(context, attr), LifecycleObserver {
+) : ConstraintLayout(context, attr) {
 
     companion object {
         const val TICK = 0x666
@@ -51,7 +53,7 @@ class RecordTimer(
 
     //当前时间
     var tickTime: Long = 0L
-        set(value) {
+        private set(value) {
             val format = TimeUtils.millis2String(value - 8 * 60 * 60 * 1000, "HH:mm:ss")
             field = value
             textView.text = format
@@ -79,7 +81,6 @@ class RecordTimer(
 
     init {
         initAttrs(attr)
-
     }
 
     private fun initAttrs(attr: AttributeSet?) {
@@ -92,6 +93,7 @@ class RecordTimer(
     }
 
     fun startRecord() {
+        //timer
         if (timer == null) {
             timer = Timer()
         }
@@ -114,6 +116,10 @@ class RecordTimer(
         animator.start()
         //回调接口
         listener?.onStop()
+    }
+
+    fun clearTickTime() {
+        this.tickTime = 0L
     }
 
     interface Listener {
