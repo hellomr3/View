@@ -1,4 +1,4 @@
-package com.looptry.library.bindingadapter
+package com.looptry.view
 
 import androidx.databinding.BindingAdapter
 import com.looptry.library.view.FoldTextView
@@ -10,12 +10,11 @@ import com.looptry.library.view.FoldTextView
  * Modify By:
  * Modify Date:
  */
-@BindingAdapter(value = ["bindFoldContent"])
-fun FoldTextView.bindContent(
-    content: CharSequence?
+@BindingAdapter(value = ["bindContent"])
+fun FoldTextView.setContent(
+    content: String?
 ) {
-    if (content == null)
-        return
+    if (content.isNullOrBlank()) return
     if (this.content == content) return
     this.content = content
 }

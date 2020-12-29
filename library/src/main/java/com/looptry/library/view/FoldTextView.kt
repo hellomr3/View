@@ -12,6 +12,7 @@ import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.annotation.IntDef
 import androidx.appcompat.widget.AppCompatTextView
 import com.looptry.library.R
@@ -29,9 +30,8 @@ import com.looptry.library.ext.toSpan
  */
 class FoldTextView(
     context: Context,
-    attrs: AttributeSet?,
-    defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+    attrs: AttributeSet?
+) : AppCompatTextView(context, attrs) {
 
     companion object {
 
@@ -54,7 +54,15 @@ class FoldTextView(
     annotation class Mode
 
     //展开模型
-    var foldMode: @Mode Int = NO_FOLD
+    var foldMode: @Mode Int
+        get() {
+            this.getTag(99)
+            return this.getTag(R.id.fold_mode) as? @Mode Int ?: NO_FOLD
+        }
+        set(value) {
+            this.setTag(R.id.fold_mode, value)
+        }
+
 
     //属性动画
     var step: Float = 0f
@@ -73,7 +81,7 @@ class FoldTextView(
     var content: CharSequence = ""
         set(value) {
             field = value
-            initView()
+            measureMode()
         }
 
     //点击按钮文字颜色
@@ -96,6 +104,14 @@ class FoldTextView(
         ta.recycle()
         //点击事件生效
         movementMethod = LinkMovementMethod.getInstance()
+
+        viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                measureMode()
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     private fun initAttrs(ta: TypedArray) {
@@ -125,16 +141,11 @@ class FoldTextView(
         }
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        measureMode()
-        initView()
-    }
-
     //计算当前的显示模式
     private fun measureMode() {
         //测量内容占lineCount
         val lineCount = content.getPreLineCount()
+        Log.e("TAG", "pre:$lineCount")
         //判定当前显示类型
         foldMode = when {
             content.isBlank() || width == 0 -> {
@@ -148,6 +159,9 @@ class FoldTextView(
             }
             else -> FLAT
         }
+
+
+        initView()
     }
 
     //更新页面

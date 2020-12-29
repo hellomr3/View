@@ -3,10 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="click"
-            type="com.looptry.view.MainActivity.ClickProxy" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +20,6 @@
             android:id="@+id/start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{()->click.start()}"
             android:text="开始"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +29,6 @@
             android:id="@+id/stop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{()->click.stop()}"
             android:text="结束"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

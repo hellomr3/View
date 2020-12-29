@@ -14,9 +14,11 @@ import kotlinx.coroutines.delay
 class MainViewModel : ViewModel() {
 
     val content = liveData<String> {
-        var content =
-            "****${System.lineSeparator()}法       功${System.lineSeparator()}${System.lineSeparator()}三去**"
-        delay(2000)
-        emit(content)
+        var v = ""
+        repeat(100){
+            v += "文字"
+            emit(v)
+            delay(100)
+        }
     }
 }

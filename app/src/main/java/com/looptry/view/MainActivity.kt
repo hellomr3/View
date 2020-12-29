@@ -10,17 +10,7 @@ class MainActivity : BasicActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
     override fun getDataBindingConfig(): DataBindingConfig {
-        return DataBindingConfig(BR.vm, R.layout.activity_timer, viewModel)
-            .addBindingParams(BR.click, ClickProxy())
+        return DataBindingConfig(BR.vm, R.layout.activity_main, viewModel)
     }
 
-    inner class ClickProxy {
-        fun start() {
-            timer.startRecord()
-        }
-
-        fun stop() {
-            timer.stopRecord()
-        }
-    }
 }
