@@ -28,5 +28,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.looptry.library.view.BlockButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/foldTextView"
+            app:leadIcon="@drawable/ic_error"
+            app:leadTitle="标题一"
+            app:titleTextSize="12sp"
+            app:showSeparatorLine="visible"
+            app:tailDesc="返回"
+            app:tailIcon="@drawable/ic_expend" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

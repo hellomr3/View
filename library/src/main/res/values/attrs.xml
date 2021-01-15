@@ -48,4 +48,28 @@
     <declare-styleable name="RecordTimer">
         <attr name="defaultTimeSecond" format="integer" />
     </declare-styleable>
+
+    <!--BlockButton-->
+    <declare-styleable name="BlockButton">
+        <attr name="leadIcon" format="reference" />
+        <!--title-->
+        <attr name="leadTitle" format="string" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <!--desc-->
+        <attr name="tailDesc" format="string" />
+        <attr name="descTextSize" format="dimension" />
+        <attr name="descTextColor" format="color" />
+        <attr name="tailIcon" format="reference" />
+        <!--SeparatorLine-->
+        <attr name="showSeparatorLine">
+            <!-- Visible on screen; the default value. -->
+            <enum name="visible" value="0" />
+            <!-- Not displayed, but taken into account during layout (space is left for it). -->
+            <enum name="invisible" value="1" />
+            <!-- Completely hidden, as if the view had not been added. -->
+            <enum name="gone" value="2" />
+        </attr>
+        <attr name="separatorLineColor" format="color" />
+    </declare-styleable>
 </resources>

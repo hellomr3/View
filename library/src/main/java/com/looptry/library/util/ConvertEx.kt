@@ -1,6 +1,7 @@
 package com.looptry.library.util
 
 import android.content.res.Resources
+import android.util.TypedValue
 
 /**
  * Author: mr.3
@@ -10,15 +11,11 @@ import android.content.res.Resources
  * Modify Date:
  */
 
-fun Float.toPx(): Float {
-    return dp2px(this).toFloat()
+fun Float.dp2Px(): Float {
+    val metrics = Resources.getSystem().displayMetrics
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, metrics)
 }
 
-fun Int.toPx(): Float {
-    return dp2px(this.toFloat()).toFloat()
-}
-
-private fun dp2px(dpValue: Float): Int {
-    val scale = Resources.getSystem().displayMetrics.density
-    return (dpValue * scale + 0.5f).toInt()
+fun Int.dp2Px(): Float {
+    return this.toFloat().dp2Px()
 }

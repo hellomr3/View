@@ -67,3 +67,7 @@ uploadArchives {
         }
     }
 }
+
+task doSomeThing(){
+    uploadArchives
+}

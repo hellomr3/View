@@ -34,6 +34,8 @@ class RecordTimer(
     companion object {
         const val TICK = 0x666
         const val CLEAR = 0x999
+
+        const val DEFAULT = 0L
     }
 
     private var root: View =
@@ -43,16 +45,13 @@ class RecordTimer(
 
     private var textView: TextView = root.findViewById(R.id.tick)
 
-    //事件回调
-    var listener: Listener? = null
-
     //动画
     private val animator = ObjectAnimator.ofFloat(imageView, "alpha", 0f, 1f).apply {
         duration = 1000
     }
 
     //当前时间
-    var tickTime: Long = 0L
+    var tickTime: Long = DEFAULT
         private set(value) {
             val format = TimeUtils.millis2String(value - 8 * 60 * 60 * 1000, "HH:mm:ss")
             field = value
@@ -71,7 +70,7 @@ class RecordTimer(
                     tickTime += 1000
                 }
                 CLEAR -> {
-                    tickTime = 0
+                    tickTime = DEFAULT
                 }
             }
         }
@@ -93,6 +92,7 @@ class RecordTimer(
     }
 
     fun startRecord() {
+        clearTickTime()
         //timer
         if (timer == null) {
             timer = Timer()
@@ -103,8 +103,7 @@ class RecordTimer(
                 msg.what = TICK
                 mHandler.sendMessage(msg)
             }
-        }, 0, 1000)
-        listener?.onStart()
+        }, 1000, 1000)
     }
 
     fun stopRecord() {
@@ -114,16 +113,12 @@ class RecordTimer(
         timer = null
         //重新展示icon
         animator.start()
-        //回调接口
-        listener?.onStop()
     }
 
     fun clearTickTime() {
-        this.tickTime = 0L
+        val msg = Message()
+        msg.what = CLEAR
+        mHandler.sendMessage(msg)
     }
 
-    interface Listener {
-        fun onStart()
-        fun onStop()
-    }
 }

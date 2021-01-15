@@ -145,7 +145,6 @@ class FoldTextView(
     private fun measureMode() {
         //测量内容占lineCount
         val lineCount = content.getPreLineCount()
-        Log.e("TAG", "pre:$lineCount")
         //判定当前显示类型
         foldMode = when {
             content.isBlank() || width == 0 -> {

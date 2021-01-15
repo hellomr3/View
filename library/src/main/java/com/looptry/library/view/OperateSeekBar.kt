@@ -81,14 +81,14 @@ class OperateSeekBar(
         (ta.getInt(R.styleable.OperateSeekBar_seekBar_progress, 0)).also {
             progress = it
         }
-        //减事件
-        setMinusListener(OnClickListener {
-            progress -= 1
-        })
-        //加事件
-        setAddListener(View.OnClickListener {
-            progress += 1
-        })
+//        //减事件
+//        setMinusListener(OnClickListener {
+//            progress -= 1
+//        })
+//        //加事件
+//        setAddListener(View.OnClickListener {
+//            progress += 1
+//        })
         //回收
         ta.recycle()
     }

@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.OverScroller
 import com.blankj.utilcode.util.ImageUtils
 import com.looptry.library.R
-import com.looptry.library.util.toPx
+import com.looptry.library.util.dp2Px
 import kotlin.properties.Delegates
 
 /**
@@ -50,7 +50,7 @@ class ScalableImageView(
     private var offsetY = 0f
 
     //边界
-    private val margin = 0.toPx()
+    private val margin = 0.dp2Px()
 
     //是否被放大
     private var useBig = false
